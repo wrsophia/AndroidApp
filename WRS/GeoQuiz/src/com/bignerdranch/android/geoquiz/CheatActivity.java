@@ -3,6 +3,7 @@ package com.bignerdranch.android.geoquiz;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -14,6 +15,9 @@ public class CheatActivity extends Activity {
 			"com.bignerdranch.android.geoquiz.answer_shown";
 	
 	private boolean mAnswerIsTrue;
+	private boolean mIfClick = false;
+	
+	private static final String IF_CLICK = "text2";
 	
 	private TextView mAnswerTextView;
 	private Button mShowAnswer;
@@ -29,7 +33,7 @@ public class CheatActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_cheat);
 		
-		setAnswerShownResult(false);
+		setAnswerShownResult(mIfClick);
 		
 		mAnswerIsTrue = getIntent().getBooleanExtra(EXTRA_ANSWER_IS_TRUE, false);
 		
@@ -46,9 +50,20 @@ public class CheatActivity extends Activity {
 				} else{
 					mAnswerTextView.setText(R.string.false_button);
 				}
-				setAnswerShownResult(true);
+				mIfClick = true;
+				setAnswerShownResult(mIfClick);
 			}
 		});
+		if(savedInstanceState != null){
+			mIfClick = savedInstanceState.getBoolean(IF_CLICK, false);
+		}
+		setAnswerShownResult(mIfClick);
 	}
+	
+	 @Override
+	    public void onSaveInstanceState(Bundle savedInstanceState){
+	    	super.onSaveInstanceState(savedInstanceState);
+	    	savedInstanceState.putBoolean(IF_CLICK, mIfClick);
+	 }
 
 }

@@ -14,6 +14,8 @@ public class QuizActivity extends Activity {
 	
 	private static final String TAG = "QuizActivity";
 	private static final String KEY_INDEX = "index";
+	private static final String CHEAT_INDEX = "text";
+	private static final String CHEAT_ARRAY = "texts";
 
 	private Button mTrueButton;
 	private Button mFalseButton;
@@ -32,6 +34,8 @@ public class QuizActivity extends Activity {
 	
 	private int mCurrentIndex = 0;
 	
+	private int[]  mCheat = new int[mQuestionBank.length];
+	
 	private boolean mIsCheater;
 	
 	private void updateQuestion(){
@@ -44,7 +48,10 @@ public class QuizActivity extends Activity {
 		boolean answerIsTrue = mQuestionBank[mCurrentIndex].isTrueQuestion();
 		int messageResId = 0;
 		if (mIsCheater){
-			messageResId = R.string.judgment_toast;
+			mCheat[mCurrentIndex] = 1;
+		}
+			if(mCheat[mCurrentIndex] == 1){
+				messageResId = R.string.judgment_toast;
 		} else{
 			if(userPressedTrue == answerIsTrue){
 				messageResId = R.string.correct_toast;
@@ -66,8 +73,12 @@ public class QuizActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d(TAG,"onCreate(Bundle) called");
+        //Log.d(TAG,"onCreate(Bundle) called");
         setContentView(R.layout.activity_quiz);
+        
+        for(int i = 0; i < mCheat.length; i++){
+        	mCheat[i] = 0;
+        }
         
         mQuestionTextView = (TextView)findViewById(R.id.question_text_view);
         mQuestionTextView.setOnClickListener(new View.OnClickListener(){
@@ -129,6 +140,8 @@ public class QuizActivity extends Activity {
         
         if(savedInstanceState != null){
         	mCurrentIndex = savedInstanceState.getInt(KEY_INDEX, 0);
+        	mIsCheater = savedInstanceState.getBoolean(CHEAT_INDEX, false);
+        	mCheat = savedInstanceState.getIntArray(CHEAT_ARRAY);
         }
         
         updateQuestion();
@@ -139,6 +152,8 @@ public class QuizActivity extends Activity {
     	super.onSaveInstanceState(savedInstanceState);
     	Log.i(TAG, "onSaveInstanceState");
     	savedInstanceState.putInt(KEY_INDEX, mCurrentIndex);
+    	savedInstanceState.putBoolean(CHEAT_INDEX, mIsCheater);
+    	savedInstanceState.putIntArray(CHEAT_ARRAY, mCheat);
     }
 
     @Override
