@@ -1,6 +1,5 @@
 package com.bignerdranch.android.crimeinalintent;
 
-import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -17,7 +16,7 @@ import android.widget.DatePicker;
 import android.widget.DatePicker.OnDateChangedListener;
 
 public class DatePickerFragment extends DialogFragment {
-	public static final String EXTRA_DATE = "com.bignerdranch.android.crimeinalintent.date";
+	public static final String EXTRA_DATE = "criminalintent.date";
 	
 	private Date mDate;
 	
@@ -46,6 +45,7 @@ public class DatePickerFragment extends DialogFragment {
 		
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(mDate);
+		
 		int year = calendar.get(Calendar.YEAR);
 		int month = calendar.get(Calendar.MONTH);
 		int day = calendar.get(Calendar.DAY_OF_MONTH);
@@ -55,9 +55,16 @@ public class DatePickerFragment extends DialogFragment {
 		DatePicker datePicker = (DatePicker)v.findViewById(R.id.dialog_date_datePicker);
 		datePicker.init(year, month, day, new OnDateChangedListener() {
 			public void onDateChanged(DatePicker view, int year, int month, int day) {
-				mDate = new GregorianCalendar(year, month, day).getTime();
 				
-				getArguments().putSerializable(EXTRA_DATE, mDate);
+				Calendar calendar = Calendar.getInstance();
+                calendar.setTime(mDate);
+
+                int hour = calendar.get(Calendar.HOUR_OF_DAY);
+                int minute = calendar.get(Calendar.MINUTE);
+
+                mDate = new GregorianCalendar(year, month, day, hour, minute).getTime();
+                getArguments().putSerializable(EXTRA_DATE, mDate);
+
 			}
 		});
 		
