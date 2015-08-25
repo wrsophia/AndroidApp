@@ -38,7 +38,7 @@
         android:layout_below="@id/crime_list_item_titleTextView"
         android:layout_toRightOf="@id/crime_list_item_dateTextView"
         android:paddingTop="4dp"
-        android:paddingLeft="8dp" />
+        android:paddingLeft="4dp" />
     
 
 </RelativeLayout>
